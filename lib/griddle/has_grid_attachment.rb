@@ -4,13 +4,11 @@ module Griddle
       base.class_eval do
         extend ClassMethods
         include InstanceMethods
+
+        class_attribute :attachment_definitions
       end
     end
 
-    included do
-      class_attribute :attachment_definitions
-    end
-    
     module ClassMethods
       def has_grid_attachment name, options = {}
         self.attachment_definitions = {} if attachment_definitions.nil?
