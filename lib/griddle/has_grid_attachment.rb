@@ -6,10 +6,14 @@ module Griddle
         include InstanceMethods
       end
     end
+
+    included do
+      class_attribute :attachment_definitions
+    end
     
     module ClassMethods
       def has_grid_attachment name, options = {}
-        write_inheritable_attribute(:attachment_definitions, {}) if attachment_definitions.nil?
+        self.attachment_definitions = {} if attachment_definitions.nil?
         attachment_definitions[name] = options
 
         after_save :save_attached_files if respond_to? :after_save
@@ -22,10 +26,6 @@ module Griddle
         define_method("#{name}=") do |file|
           attachment_for(name, options).assign(file)
         end        
-      end
-      
-      def attachment_definitions
-        read_inheritable_attribute(:attachment_definitions)
       end
     end
     
